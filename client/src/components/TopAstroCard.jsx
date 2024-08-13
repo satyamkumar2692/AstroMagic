@@ -1,5 +1,4 @@
 import React from "react";
-// import { PROFILE_IMG } from "../utils/constants";
 const PROFILE_IMG = "http://aws.astrotalk.com/consultant_pic/";
 const TopAstroCard = ({ info }) => {
   return (

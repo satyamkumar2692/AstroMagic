@@ -1,44 +1,28 @@
 import useChat from "../custom hooks/useChat";
 import { useSelector } from "react-redux";
 import ChatCardContainer  from "./ChatCardContainer";
-import ShimmerList from "../shimmer/ShimmerList";
 import { useState } from "react";
 import lang from "../utils/langConstants";
-import Chatbot from "./Chatbot";
-import { Link } from "react-router-dom";
 import bg from "../image/bg1.jpg"
-import Error from "./Error";
-// import Card from "./Card";
 const Chat = () => {
     
     const [search, setSearch] = useState(""); 
     const [mainchatList, setMainchatList] = useState(null); 
-
-    const Langkey = useSelector(store => store.configApp.lang)
-    const Bot = useSelector(store => store.configApp.Bot)
-
-    
+    const Langkey = useSelector(store => store.configApp.lang) 
     useChat()
     const chatList = useSelector(store => store.astro.chatList)
-    if (!chatList) return <ShimmerList/>
-   
-
-
     const handleSearch = (e) => {
         const searchTerm = e.target.value.toLowerCase();
         setSearch(searchTerm);
-        
-       
         const filteredList = chatList.filter(name => name.slug.toLowerCase().includes(searchTerm));
         setMainchatList(filteredList);
-      
     };
 
     const btnCSS = "lg:text-base focus:bg-purple-800 active:bg-purple-800  active:bg-purple-900 active:text-purple-100 bg-purple-600 bg-opacity-10 hover:bg-purple-800   transition-all text-sm border px-4  lg:px-4 py-2 lg:py-1.5   border-purple-600 text-purple-300 font-normal rounded-3xl sm:rounded-full cursor-pointer"
 
     return (
         <div  className="relative w-12/12 ">
-            <Chatbot/>
+            {/* <Chatbot/> */}
             <img alt="bg" className="h-screen w-full md:scale-100 scale-x-[3] brightness-50 fixed top-0 left-0 -z-40" src={bg}></img>
            <div className="lg:pt-6 pt-3 px-4 lg:px-20 md:px-16  flex flex-col justify-center  items-start">
             <div className="w-full flex lg:flex-row flex-col justify-between mt-20 lg:mb-4  mb-3 items-start lg:items-center">
@@ -104,18 +88,10 @@ const Chat = () => {
                         let Palmistry = chatList.filter((Palmistry)=> Palmistry.skill.includes("Palmistry"))
                         setMainchatList(Palmistry)
                     }}>{lang[Langkey].palmistry}</button>
-
-
-                    
                 </div>
             </div>
            <div >
             <ChatCardContainer list={mainchatList || chatList} />
-            {/* <div className="flex flex-row flex-wrap justify-center items-center gap-6 py-4 lg:py-10 w-12/12">
-           {
-                chatList?.map(astro => <div className="md:w-6/12 sm:w-6/12 w-11/12 lg:w-[28%]" key={astro?.id}><Link className="" to={"/astroProfile/" + astro?.name}  ><Card info={astro} /></Link></div>)
-            }
-        </div> */}
             </div>
         </div>
     )

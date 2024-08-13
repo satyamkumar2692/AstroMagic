@@ -19,8 +19,6 @@ const About = () => {
         </div>
         <div className="flex flex-col justify-start pt-14 items-start">
             <span className="text-3xl font-bold text-purple-400">Key Features:</span>
-           
-            
            <span className={ptCSS}> Kundli Access:</span><li className={liCSS}> Enabled users to access their Kundli, providing them with valuable insights into their astrological profiles and characteristics.</li>
 
            <span className={ptCSS}> Personalized Daily Horoscope:</span><li className={liCSS}> Delivered personalized daily horoscope readings to users, offering them guidance and predictions tailored to their individual zodiac signs.</li>

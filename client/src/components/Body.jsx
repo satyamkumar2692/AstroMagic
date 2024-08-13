@@ -1,21 +1,9 @@
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import Hero from "./Hero";
 import Chat from "./Chat";
-// import Call from "./Call";
-// import AstroProfile from "./AstroProfile";
 import Header from "./Header";
-// import Following from "./Following";
-// import Chatbot from "./Chatbot";
 import AstroKundli from "./AstroKundli";
-import LoginForm from "./LoginForm";
-import LoginPage from "./LoginPage";
-// import Horoscope from "./Horoscope";
-// import FootIcons from "./FootIcons";
-// import Loading from "../utils/Loading";
-// import AstrologersTalk from "./AstrologersTalk";
-// import AstrologersCallPage from "./AstrologersCallPage";
 import About from "./About";
-import Error from "./Error";
 import Footer from "./Footer";
 import Chatbothoro from "./Chatbothoro";
 
@@ -26,7 +14,6 @@ const Body = () => {
       element: (
         <>
           <Header />
-          {/* <FootIcons /> */}
           <Outlet />
           <Footer/>
         </>
@@ -44,51 +31,14 @@ const Body = () => {
           path: "/horo",
           element: <Chatbothoro/>,
         },
-        // {
-        //   path: "/call",
-        //   element: <Call />,
-        // },
-        // {
-        //   path: "/astroProfile/:id",
-        //   element: <AstroProfile />,
-        // },
-        // {
-        //   path: "/following",
-        //   element: <Following />,
-        // },
-        // {
-        //   path: "/chatbot",
-        //   element: <Chatbot />,
-        // },
-        {
-          path: "/kundligpt",
-          element: <AstroKundli />,
-        },
-        // {
-        //   path: "/horoscope/:id",
-        //   element: <Horoscope />,
-        // },
-        // {
-        //   path: "/astrologerschat/:id",
-        //   element: <AstrologersTalk />,
-        // },
-        // {
-        //   path: "/astrologerscall",
-        //   element: <AstrologersCallPage />,
-        // },
-        // {
-        //   path: "/login",
-        //   element: <LoginPage/>,
-        // },
         {
           path: "/about",
           element: <About />,
         },
         {
-          path: "/error",
-          element: <Error />,
-        },
-
+          path: "/kundligpt",
+          element: <AstroKundli />,
+        }
       ],
     },
    

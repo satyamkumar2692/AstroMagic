@@ -1,33 +1,36 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/user.model.js"
+import User from "../models/user.model.js";
 
 export const register = async (req, res) => {
-  const { username, email, password } = req.body;
-
+  const { email, password } = req.body;
+  console.log(email);
   try {
     // HASH THE PASSWORD
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log(hashedPassword);
 
     // CREATE A NEW USER AND SAVE TO DB
-    const newUser = new User({ username, email, password: hashedPassword });
+    const newUser = new User({ email, password: hashedPassword });
     await newUser.save();
     console.log(newUser);
 
-    res.status(201).json({ message: "User created successfully" });
+    res
+      .status(201)
+      .json({ status: "success", message: "User created successfully" });
   } catch (err) {
+    console.log("err in register");
     console.log(err);
-    res.status(500).json({ message: "Failed to create user!" });
+    res.status(500).json({ status: "fail", message: "Failed to create user!" });
   }
 };
 
 export const login = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   try {
     // CHECK IF THE USER EXISTS
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "Invalid Credentials!" });
 
     // CHECK IF THE PASSWORD IS CORRECT
@@ -57,7 +60,7 @@ export const login = async (req, res) => {
         maxAge: age,
       })
       .status(200)
-      .json(userInfo);
+      .json({ status: "success", userInfo });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Failed to login!" });

@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { addChat } from "../store/AstroSlice";
 import { useNavigate } from "react-router-dom";
-// import { Bounce, toast } from "react-toastify";
 
 const useChat = () => {
 
@@ -19,19 +18,6 @@ const useChat = () => {
         console.error("Error fetching data:", error);
 
         if (error.message === 'Failed to fetch') {
-
-            // toast.error("Failed to fetch", {
-            //     position: "top-center",
-            //     autoClose: 3000,
-            //     hideProgressBar: true,
-            //     closeOnClick: true,
-            //     pauseOnHover: false,
-            //     draggable: true,
-            //     progress: undefined,
-            //     theme: "dark",
-            //     transition: Bounce,
-            //   });
-            // navigate("/error")
             console.log("error in fetching chat  astrologers ")
             
         }

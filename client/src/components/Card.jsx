@@ -1,6 +1,3 @@
-// import { PROFILE_BG, PROFILE_IMG } from "../utils/constants";
-import ShimmerList from "../shimmer/ShimmerList";
-
 import lang from "../utils/langConstants";
 import { useSelector } from "react-redux";
 
@@ -8,12 +5,6 @@ const Card = ({ info }) => {
 
     const Langkey = useSelector(store => store.configApp.lang)
     const PROFILE_IMG = "http://aws.astrotalk.com/consultant_pic/";
-  if (!info) {
-    return <ShimmerList />
-  }
-
-
-
   return (
     <div className="flex justify-start overflow-hidden shadow-sm shadow-zinc-700 hover:bg-purple-800 transition-all hover:bg-opacity-55 w-full bg-purple-950 bg-opacity-55  rounded-xl gap-4  px-2 py-2 items-start h-full flex-row">
       <div className="w-3/12 h-full  py-2  flex flex-col justify-start items-center">

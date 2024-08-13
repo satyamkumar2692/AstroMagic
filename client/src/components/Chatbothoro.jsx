@@ -1,26 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
-// import { CHAT_BOT } from "../utils/constants";
-// import openai from "./../utils/openai";
 import React, { useRef, useState } from "react";
 import { addBot, addForm, addLimit } from "../store/configAppSlice";
-// import { toast, Bounce } from "react-toastify";
 import logo from "../image/Logo.png"
-import lang from "../utils/langConstants";
 import Groq from "groq-sdk";
-
+import { useNavigate } from "react-router-dom";
 const Chatbothoro = () => {
   const input = useRef();
-
-  // const [apiLimit, setapiLimit] = useState(1);
-
   const user = useSelector((store) => store.user);
   const form = useSelector((store) => store.configApp.form);
   const dispatch = useDispatch();
-
+const navigate = useNavigate();
   const [result, setresult] = useState(["StellarGuide: Hi"]);
 
   const handlebot = () => {
     dispatch(addBot());
+    navigate("/");
   };
 
   const groq = new Groq({
@@ -53,7 +47,7 @@ const Responce = data?.choices?.[0]?.message?.content;
   };
 
 
-  const LangKey = useSelector(store => store.configApp.lang)
+
 
   return (
  

@@ -2,22 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Explore from "./Explore";
 import { useEffect, useState } from "react";
 import TopAstro from "./TopAstro";
-// import SignSearch from "./SignSearch";
-// import Chatbot from "./Chatbot";
 import bg from "../image/bg1.jpg";
 import Why from "./Why";
-// import Coming from "./Coming";
 import LoginForm from "./LoginForm";
-import logo from "../image/Logo.png"
-// import { addBot } from "../store/configAppSlice";
 import React, { useRef } from 'react';
 const Hero = () => {
   const form = useSelector((store) => store.configApp.form);
   const [topAstro, settopAstro] = useState();
   const dispatch = useDispatch()
-
-  // const Bot = useSelector((store) => store.configApp.Bot);
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -29,21 +21,17 @@ const Hero = () => {
     );
     const jsonn = await data.json();
     settopAstro(jsonn?.content);
-    // console.log(jsonn.content);
   }
     catch (e){
-      console.log("there is something wrong brdr");
+      console.log("there is something wrong in getting top astrologers list");
     }
   };
-  const targetRef = useRef(null);
 
+  const targetRef = useRef(null);
   const handleScroll = () => {
     targetRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // const handleBot = ()=>{
-  //   dispatch(addBot())
-  // }
 
   return (
     <> {form && <LoginForm/>}
@@ -53,17 +41,14 @@ const Hero = () => {
         className="h-screen brightness-75 w-full md:scale-100 scale-x-[3] fixed top-0 left-0 -z-40"
         src={bg}
       ></img>
-      {/* {Bot && <Chatbot />} */}
       <Explore handleScroll={handleScroll}/>
       <TopAstro list={topAstro} />
       <Why reff={targetRef}/>
-
-      {/* <SignSearch />
-      <div className=" lg:bottom-5 2xl:bottom-6 hidden md:block fixed 2xl:right-4 lg:right-7">
-        <img src={logo} alt="logo" className="w-24 cursor-pointer" onClick={handleBot}></img>
-  </div> */}
     </div>
     </>
-  );
+  ); 
 };
 export default Hero;
+
+
+ 

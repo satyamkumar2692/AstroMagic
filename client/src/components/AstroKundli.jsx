@@ -13,6 +13,7 @@ import handbg from "../image/hand_bg.png";
 // import lang from "../utils/langConstants";
 import LoginForm from "./LoginForm";
 import TableComponent from "./TableComponent";
+
 const AstroKundli = () => {
   const user = useSelector((store) => store.user);
   // const Bot = useSelector((store) => store.configApp.Bot);
@@ -137,14 +138,15 @@ const AstroKundli = () => {
     const response = await fetch(url, options);
     const resul = await response.text();
     const obj = await JSON.parse(resul);
-    // console.log(obj.output[0]);
-    // Object.keys(obj.output[0]).forEach(function(key, index) {
-    //   console.log( obj.output[0][key]);
-    // });
+    console.log(obj.output[0]);
+    Object.keys(obj.output[0]).forEach(function(key, index) {
+      console.log( obj.output[0][key]);
+    });
     const ob=obj.output[0];
     const copiedData = { ...ob};
     setData(copiedData);
     setresult(resul);
+    // console.log(obj);
   } catch (error) {
     console.error(error);
   }
