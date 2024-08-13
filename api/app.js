@@ -4,13 +4,11 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import router from "./router.js";
-import morgan from "morgan";
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(morgan("dev"));
 
 import path from "path";
 import { fileURLToPath } from "url";
