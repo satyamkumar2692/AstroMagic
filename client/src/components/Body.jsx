@@ -3,10 +3,12 @@ import Hero from "./Hero";
 import Chat from "./Chat";
 import Header from "./Header";
 import AstroKundli from "./AstroKundli";
+import ProfilePage from "./ProfilePage";
 import About from "./About";
 import Footer from "./Footer";
 import Chatbothoro from "./Chatbothoro";
-
+import ProtectedRoute from "../ProtectedRoute";
+import MatchKundli from "./MatchKundli";
 const Body = () => {
   const appLayout = createBrowserRouter([
     {
@@ -15,7 +17,7 @@ const Body = () => {
         <>
           <Header />
           <Outlet />
-          <Footer/>
+          <Footer />
         </>
       ),
       children: [
@@ -25,23 +27,54 @@ const Body = () => {
         },
         {
           path: "/chat",
-          element: <Chat />,
+          element: (
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/horo",
-          element: <Chatbothoro/>,
+          element: (
+            <ProtectedRoute>
+              <Chatbothoro />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/about",
-          element: <About />,
+          element: (
+            <ProtectedRoute>
+              <About />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/kundligpt",
-          element: <AstroKundli />,
-        }
+          element: (
+            <ProtectedRoute>
+              <AstroKundli />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/match",
+          element: (
+            <ProtectedRoute>
+              <MatchKundli />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/profile",
+          element: (
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          ),
+        },
       ],
     },
-   
   ]);
 
   return (

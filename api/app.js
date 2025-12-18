@@ -1,7 +1,7 @@
-import express from "express";
 import dotenv from "dotenv";
-// import cors from "cors";
+import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 import router from "./router.js";
 dotenv.config();
@@ -9,6 +9,17 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
+app.use("/api", router);
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -27,17 +38,6 @@ mongoose
   .catch((e) => {
     console.log("failed");
   });
-
-// app.use(cors({
-//     origin: "http://localhost:5173",
-//     methods: ["GET", "POST", "PUT", "DELETE"],
-//     allowedHeaders: ["Content-Type", "Authorization"],
-//     credentials: true
-
-// }));
-
-app.get("/", (req, res) => res.status(200).json("hi"));
-app.use("/api", router);
 
 app.listen(8800, () => {
   console.log("Server is running on port 8800");

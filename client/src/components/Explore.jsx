@@ -5,36 +5,29 @@ import handbg from "../image/hand_bg.png";
 import hand from "../image/hand.png";
 // import { addBot } from "../store/configAppSlice";
 // import { Link } from "react-router-dom";
-import React, { useRef } from 'react';
+import React, { useRef } from "react";
 
-const Explore = ({handleScroll}) => {
-  // const Langkey = useSelector((store) => store.configApp.lang);
-  // const dispatch = useDispatch()
-
-  // const handlebot = ()=>{
-  //   dispatch(addBot())
-  // }
-
+const Explore = ({ handleScroll }) => {
   return (
     <div className="w-12/12  flex flex-col">
       <div className="relative lg:h-screen pt-28 lg:pt-16 mx-6 md:px-10 lg:gap-10 gap-3  flex flex-col lg:flex-row justify-center items-center w-12/12">
         <div className=" lg:w-6/12 w-full lg:pl-14 z-10 lg:flex flex lg:justify-start justify-center items-center lg:items-start lg:pt-28 2xl:pt-[20%] flex-col h-full text-white">
           <span className="text-xl 2xl:text-6xl uppercase lg:text-start text-center tracking-widest lg:text-4xl w-full font-medium text-purple-50">
-          {/* {lang[Langkey].welcome} */}
-          Unveil the Mysteries
+            {/* {lang[Langkey].welcome} */}
+            Unveil the Mysteries
           </span>
           <span className="lg:text-[85px] 2xl:text-[150px] tracking-wide lg:tracking-wide text-5xl font-bold lg:pb-1 pb-2 lg:pt-0 text-purple-300">
             {" "}
-          {/* {lang[Langkey].astroGPT} */}
-           AstroMagic
+            {/* {lang[Langkey].astroGPT} */}
+            AstroMagic
           </span>
           <span className="text-base 2xl:text-4xl uppercase lg:text-start text-center w-[80%] tracking-[3px]  lg:text-xl   font-medium text-purple-50">
-          {/* {lang[Langkey].finger} */}
-          Embrace the Magic of the Stars
+            {/* {lang[Langkey].finger} */}
+            Embrace the Magic of the Stars
           </span>
           <span className="lg:py-2 2xl:text-2xl  text-[10px] lg:pt-2 pt-4 lg:text-base tracking-wider  font-normal w-[80%] lg:items-start lg:text-left items-center flex text-center italic text-zinc-300">
             {/* {lang[Langkey].loginDescription} */}
-            Connect with astrologers, chat, and get personalized horoscopes  
+            Connect with astrologers, chat, and get personalized horoscopes
           </span>
           {/* <div className="flex flex-row lg:pt-0 pt-3 gap-3">
             <button className="lg:px-5 2xl:px-8 2xl:py-3 px-3 hover:bg-transparent border-2 rounded-full hover:shadow-inner   shadow-purple-950  ring-purple-100 shadow-lg hover:shadow-purple-700 border-purple-700 transition-all lg:my-2 my-1 py-1 lg:py-1.5  text-white bg-purple-700  uppercase tracking-wide font-semibold 2xl:text-lg text-sm lg:text-lg" onClick={handlebot}>
@@ -44,12 +37,14 @@ const Explore = ({handleScroll}) => {
               {lang[Langkey].astroKundli}
             </button></Link> 
           </div> */}
-           <div className="flex flex-row lg:pt-0 pt-3 gap-3">
-            <button className="lg:px-5 2xl:px-8 2xl:py-3 px-3 hover:bg-transparent border-2 rounded-full hover:shadow-inner   shadow-purple-950  ring-purple-100 shadow-lg hover:shadow-purple-700 border-purple-700 transition-all lg:my-2 my-1 py-1 lg:py-1.5  text-white bg-purple-700  uppercase tracking-wide font-semibold 2xl:text-lg text-sm lg:text-lg" onClick={handleScroll}>
+          <div className="flex flex-row lg:pt-0 pt-3 gap-3">
+            <button
+              className="lg:px-5 2xl:px-8 2xl:py-3 px-3 hover:bg-transparent border-2 rounded-full hover:shadow-inner   shadow-purple-950  ring-purple-100 shadow-lg hover:shadow-purple-700 border-purple-700 transition-all lg:my-2 my-1 py-1 lg:py-1.5  text-white bg-purple-700  uppercase tracking-wide font-semibold 2xl:text-lg text-sm lg:text-lg"
+              onClick={handleScroll}
+            >
               {/* {lang[Langkey].astroBot} */}
               Why Astrology?
             </button>
-          
           </div>
         </div>
         <div className="relative flex justify-center h-[35vh] items-center lg:pt-0 lg:w-6/12 lg:h-screen">
@@ -66,7 +61,7 @@ const Explore = ({handleScroll}) => {
         </div>
       </div>
 
-      <ZodiacContainer/>
+      <ZodiacContainer />
     </div>
   );
 };

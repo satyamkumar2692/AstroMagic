@@ -17,10 +17,13 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "groq-sdk": "^0.36.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.0",
     "nodemon": "^3.1.2",
+    "pdfkit": "^0.17.2",
+    "svg-to-pdfkit": "^0.1.8",
     "validator": "^13.12.0"
   }
 }

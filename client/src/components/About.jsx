@@ -1,61 +1,339 @@
-import React from "react";
-import bg from "../image/bg1.jpg"
+import React, { useRef, useEffect, useState } from "react";
 
+/**
+ * Local globe image path (the file you uploaded).
+ * Keep this path as-is if the file is available at that location in your dev environment.
+ */
+const EARTH_IMG = "/mnt/data/60efeb2a--4ef-8b62-e95d700d6d02.png";
 
-const About = () => {
-    const liCSS = "text-lg font-normal text-purple-200 opacity-95"
-    const ptCSS = "text-purple-300  pt-8 text-xl tracking-wide font-medium"
+export default function AboutEnhanced() {
+  const globeRef = useRef(null);
+  const dragging = useRef(false);
+  const lastX = useRef(0);
+  const velocity = useRef(0);
+  const rafRef = useRef(null);
+  const angleRef = useRef({ x: -10, y: 0 }); // start tilt and rotation
+  const [score] = useState(88); // example metric for design
+
+  // simple inertia animation after drag release
+  const animateInertia = () => {
+    cancelAnimationFrame(rafRef.current);
+    const step = () => {
+      // friction
+      velocity.current *= 0.94;
+      angleRef.current.y += velocity.current;
+      applyTransform();
+      if (Math.abs(velocity.current) > 0.001) {
+        rafRef.current = requestAnimationFrame(step);
+      } else {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+    rafRef.current = requestAnimationFrame(step);
+  };
+
+  const applyTransform = () => {
+    const el = globeRef.current;
+    if (!el) return;
+    const { x, y } = angleRef.current;
+    el.style.transform = `rotateX(${x}deg) rotateY(${y}deg)`;
+  };
+
+  useEffect(() => {
+    applyTransform();
+    return () => cancelAnimationFrame(rafRef.current);
+  }, []);
+
+  // pointer handlers
+  useEffect(() => {
+    const el = globeRef.current;
+    if (!el) return;
+
+    const onDown = (e) => {
+      dragging.current = true;
+      lastX.current = e.clientX ?? e.touches?.[0]?.clientX;
+      velocity.current = 0;
+      cancelAnimationFrame(rafRef.current);
+      el.classList.add("active-drag");
+    };
+    const onMove = (e) => {
+      if (!dragging.current) return;
+      const curX = e.clientX ?? e.touches?.[0]?.clientX;
+      const dx = curX - lastX.current;
+      lastX.current = curX;
+      // tweak sensitivity:
+      const sens = 0.35;
+      angleRef.current.y += dx * sens;
+      // track velocity for inertia
+      velocity.current = dx * sens;
+      applyTransform();
+    };
+    const onUp = () => {
+      if (!dragging.current) return;
+      dragging.current = false;
+      animateInertia();
+      el.classList.remove("active-drag");
+    };
+
+    // mouse
+    el.addEventListener("mousedown", onDown);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    // touch
+    el.addEventListener("touchstart", onDown, { passive: true });
+    window.addEventListener("touchmove", onMove, { passive: true });
+    window.addEventListener("touchend", onUp);
+
+    return () => {
+      el.removeEventListener("mousedown", onDown);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+      el.removeEventListener("touchstart", onDown);
+      window.removeEventListener("touchmove", onMove);
+      window.removeEventListener("touchend", onUp);
+    };
+  }, []);
+
   return (
-    <div className="relative w-12/12">
-      <img
-        alt="bg"
-        className="h-screen w-full md:scale-100 scale-x-[3] brightness-50 fixed top-0 left-0 -z-40"
-        src={bg}
-      ></img>
-      <div className="flex justify-center items-center flex-col mx-20 py-28">
-        <div className="flex flex-col justify-start items-start">
-            <span className="text-3xl font-bold text-purple-400">ABOUT US</span>
-            <span className="text-purple-200 opacity-90 pt-4 text-[17px] tracking-wide font-normal">AstroGPT is a highly performant, large scalable astrology web app, ready for production, empowered with the superpowers of ChatGPT. This cutting-edge platform seamlessly blends traditional astrological practices with advanced technologies, offering users a unique and immersive astrological experience. With a focus on scalability, performance, and user satisfaction, AstroGPT boasts an array of innovative features designed to enhance the user experience and provide invaluable insights into the mystical world of astrology.</span>
+    <div className="relative w-full min-h-screen text-purple-100 bg-gradient-to-b from-[#070011] via-[#110022] to-black overflow-hidden">
+      {/* Background soft stars */}
+      <div className="absolute inset-0 opacity-40 pointer-events-none">
+        <div className="w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent to-transparent"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 relative z-10">
+        {/* Header */}
+        <header className="flex flex-col lg:flex-row lg:items-center gap-8">
+          <div className="lg:w-1/2">
+            <h1 className="text-4xl lg:text-5xl font-extrabold text-purple-200 leading-tight">
+              AstroGPT — your personal cosmic studio
+            </h1>
+            <p className="mt-4 text-lg text-purple-300/90 max-w-xl">
+              We blend traditional Vedic wisdom with modern AI. Ask a question,
+              generate a Kundli, compare matches, or get a daily horoscope — all
+              powered by intelligent, contextual astrology.
+            </p>
+
+            {/* KPIs / quick actions */}
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-semibold shadow">
+                Try AI Horoscope
+              </button>
+              <button className="px-4 py-2 border border-purple-600 rounded-2xl">
+                Generate Kundli
+              </button>
+              <div className="ml-2 px-4 py-2 bg-[#1b002f]/60 rounded-2xl flex items-center gap-3">
+                <div className="text-sm text-pink-300 font-bold">{score}%</div>
+                <div className="text-sm text-purple-300">Avg trust score</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Globe + orbiting icons */}
+          <div className="lg:w-1/2 flex justify-center items-center">
+            <div className="relative w-64 h-64 lg:w-80 lg:h-80">
+              {/* orbit ring */}
+              <div className="absolute inset-0 flex justify-center items-center">
+                <div className="w-full h-full rounded-full border border-purple-700/20 animate-ringSlow"></div>
+              </div>
+
+              {/* interactive globe */}
+              <div
+                ref={globeRef}
+                className="relative w-56 h-56 lg:w-64 lg:h-64 rounded-full overflow-hidden shadow-2xl cursor-grab transition-transform"
+                style={{
+                  transformStyle: "preserve-3d",
+                  transform: "rotateX(-10deg) rotateY(0deg)",
+                  backgroundImage: `url(${EARTH_IMG})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+                aria-label="Interactive Earth — drag to rotate"
+              />
+
+              {/* small orbiting badges (features) */}
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <div className="px-3 py-1 bg-[#2a003f]/70 border border-purple-600 rounded-full text-xs">
+                  AI Horoscope
+                </div>
+              </div>
+              <div className="absolute right-2 top-1/2 translate-y-[-50%]">
+                <div className="px-3 py-1 bg-[#2a003f]/70 border border-purple-600 rounded-full text-xs">
+                  Kundli
+                </div>
+              </div>
+              <div className="absolute left-2 bottom-6">
+                <div className="px-3 py-1 bg-[#2a003f]/70 border border-purple-600 rounded-full text-xs">
+                  Matchmaking
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Features grid */}
+        <section className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            {
+              title: "AI Chat",
+              desc: "Ask personalized questions and get context-aware answers from our Astro GPT chatbot.",
+              accent: "💬",
+            },
+            {
+              title: "Daily Horoscope",
+              desc: "Daily cosmic guidance tailored to your sign — short, practical and positive.",
+              accent: "☀️",
+            },
+            {
+              title: "Kundli & Charts",
+              desc: "Generate a traditional birth chart with house-wise planets, strengths & remedies.",
+              accent: "🕉️",
+            },
+            {
+              title: "Match Making",
+              desc: "AI-assisted compatibility reports with highlights, remedies and PDF export.",
+              accent: "❤️",
+            },
+            {
+              title: "Real-time Chat",
+              desc: "Live chats and saved history so every session is contextual and private.",
+              accent: "⚡",
+            },
+            {
+              title: "Privacy & Security",
+              desc: "Profiles stored securely — you control what to keep or discard.",
+              accent: "🔒",
+            },
+          ].map((f, i) => (
+            <article
+              key={i}
+              className="bg-[#12001f]/60 border border-purple-700/30 rounded-2xl p-5 shadow-lg hover:scale-[1.02] transition-transform"
+            >
+              <div className="flex items-start gap-4">
+                <div className="text-2xl">{f.accent}</div>
+                <div>
+                  <h4 className="font-semibold text-purple-100">{f.title}</h4>
+                  <p className="text-purple-300 text-sm mt-1">{f.desc}</p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </section>
+
+        {/* Story / Philosophy */}
+        <section className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div>
+            <h3 className="text-2xl font-bold text-purple-200">
+              Why we built AstroGPT
+            </h3>
+            <p className="mt-3 text-purple-300 leading-relaxed">
+              Astrology is a language — ancient, symbolic and remarkably human.
+              We built AstroGPT to translate that language into clear, modern
+              advice while preserving traditional techniques. Use it for
+              curiosity, guidance, or deep practice — the tools adapt to your
+              intent.
+            </p>
+
+            <ul className="mt-4 space-y-2 text-purple-300">
+              <li>• Blend of Vedic methods and AI summarization</li>
+              <li>• Lightweight, privacy-first profile storage</li>
+              <li>• Exportable reports (PDF) and shareable insights</li>
+            </ul>
+          </div>
+
+          <div className="bg-[#14001e]/50 p-6 rounded-2xl border border-purple-700/30">
+            <h4 className="text-lg text-purple-200 font-semibold">
+              How it works
+            </h4>
+            <ol className="mt-3 list-decimal list-inside text-purple-300 space-y-2">
+              <li>
+                Save a profile (DOB, time, place) — we prefill forms when
+                possible.
+              </li>
+              <li>
+                Generate Kundli or ask the AI for a horoscope — we use charts
+                and historical context.
+              </li>
+              <li>
+                Export a PDF or save reports to your account when you like.
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <div className="mt-12 flex flex-col md:flex-row gap-4 items-center">
+          <button className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-semibold shadow">
+            Start with your Kundli
+          </button>
+          <button className="px-6 py-3 border border-purple-600 rounded-2xl">
+            Try daily horoscope
+          </button>
         </div>
-        <div className="flex flex-col justify-start pt-14 items-start">
-            <span className="text-3xl font-bold text-purple-400">Key Features:</span>
-           <span className={ptCSS}> Kundli Access:</span><li className={liCSS}> Enabled users to access their Kundli, providing them with valuable insights into their astrological profiles and characteristics.</li>
 
-           <span className={ptCSS}> Personalized Daily Horoscope:</span><li className={liCSS}> Delivered personalized daily horoscope readings to users, offering them guidance and predictions tailored to their individual zodiac signs.</li>
-
-           <span className={ptCSS}>Astro Chatbot Powered by ChatGPT:</span><li className={liCSS}> Integrated an intelligent chatbot powered by ChatGPT, allowing users to interact with the app and receive instant responses to their astrological queries and concerns.</li>
-
-           <span className={ptCSS}>Scalable Architecture: </span><li className={liCSS}>Engineered a robust and scalable architecture to accommodate a large user base and handle extensive data processing without compromising performance.</li>
-
-           <span className={ptCSS}>Key Features: </span><li className={liCSS}>Implemented essential features such as Kundli access, personalized daily horoscope, and an astro chatbot powered by ChatGPT, catering to diverse user needs.</li>
-
-           <span className={ptCSS}>   OpenAI Integration:</span><li className={liCSS}> Integrated OpenAI API for dynamic tasks, enhancing the app's functionality and responsiveness to user interactions.</li>
-
-           <span className={ptCSS}>Optimization Techniques:</span><li className={liCSS}>  Utilized lazy loading and chunking techniques to optimize loading times and improve overall app responsiveness, resulting in a 20% reduction in loading times and a 15% improvement in performance.</li>
-
-           <span className={ptCSS}> API Management:</span><li className={liCSS}>  Efficiently managed over 10 API calls, leveraging memoization to prevent unnecessary calls and streamline data retrieval processes.</li>
-
-           <span className={ptCSS}> Multilingual Support:</span><li className={liCSS}> Implemented advanced multilingual features, covering 90% of the app's content in 7 different languages, enhancing accessibility and user experience for a global audience.</li>
-
-           <span className={ptCSS}>  Authentication:</span><li className={liCSS}>  Integrated Google Firebase for secure authentication, ensuring access only for authenticated users and safeguarding sensitive user data.</li>
-
-           <span className={ptCSS}> Real-time Communication: </span><li className={liCSS}> Incorporated AstroTalk live API for real-time communication with astrologers, facilitating seamless interaction and consultation via the app's chatbot feature.</li>
-
-           <span className={ptCSS}> Styling and Responsiveness: </span><li className={liCSS}>Utilized Tailwind for styling, ensuring a visually appealing user interface and 100% responsiveness across all devices, enhancing user engagement and satisfaction.</li>
-
-           <span className={ptCSS}>Ongoing Development:</span><li className={liCSS}> Continuously developing the app with plans to implement advanced functionalities, including dynamic search using debouncing to optimize API calls.</li>
-
-           <span className={ptCSS}> Proof of Work: </span><li className={liCSS}> Documented the journey and achievements of AstroGPT on LinkedIn, providing insights into the development process and milestones achieved. Interested users can explore the live demo and access the AstroGPT GitHub repository for further information and collaboration opportunities.</li>
-
-
-
-
-     
-
+        {/* footer micro-note */}
+        <div className="mt-12 text-sm text-purple-400/80">
+          Note: All readings are generated to be positive & helpful. For
+          medical, legal, or financial advice consult licensed professionals.
         </div>
       </div>
+
+      {/* small CSS - keyframes and helper */}
+      <style jsx>{`
+        /* simple ring spin */
+        @keyframes ringRotate {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        .animate-ringSlow {
+          animation: ringRotate 18s linear infinite;
+        }
+
+        .animate-scaleIn {
+          animation: scaleIn 450ms ease;
+        }
+        @keyframes scaleIn {
+          from {
+            transform: translateY(10px) scale(0.98);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+          }
+        }
+
+        .animate-fadeUp {
+          animation: fadeUp 520ms ease;
+        }
+        @keyframes fadeUp {
+          from {
+            transform: translateY(10px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+
+        /* globe subtle grab effect */
+        .active-drag {
+          cursor: grabbing !important;
+          filter: brightness(1.02) saturate(1.05);
+        }
+
+        /* responsiveness tweaks */
+        @media (max-width: 768px) {
+          .animate-ringSlow {
+            display: none;
+          }
+        }
+      `}</style>
     </div>
   );
-};
-
-export default About;
+}

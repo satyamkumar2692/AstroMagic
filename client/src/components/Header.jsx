@@ -63,7 +63,15 @@ const Header = () => {
                   handleform();
                 }}
               >
-                KUNDLI MATCHING
+                Kundli Match
+              </span>
+              <span
+                className={liCSS + " disabled-link"}
+                onClick={(e) => {
+                  handleform();
+                }}
+              >
+                PROFILE
               </span>
               <span
                 className={liCSS + " disabled-link"}
@@ -86,8 +94,11 @@ const Header = () => {
               <Link to={"/kundligpt"} className={liCSS}>
                 KUNDLI
               </Link>
-              <Link to={"/kundligpt"} className={liCSS}>
-                KUNDLI MATCHING
+              <Link to={"/match"} className={liCSS}>
+                KUNDLI MATCH
+              </Link>
+              <Link to={"/profile"} className={liCSS}>
+                profile
               </Link>
               <Link to={"/about"} className={liCSS}>
                 About
