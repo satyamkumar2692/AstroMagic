@@ -1,10 +1,9 @@
 import Groq from "groq-sdk";
 import User from "../models/user.model.js";
 import ChatHistory from "../models/chat.model.js";
-import { env } from "process";
 
 const groq = new Groq({
-  apiKey: env.GROQ_API_KEY,
+  apiKey: process.env.GROQ_API_KEY,
 });
 
 export const aiHoroscope = async (req, res) => {
