@@ -1,8 +1,9 @@
 // api/controllers/kundliController.js
 import Groq from "groq-sdk"; // or use OpenAI SDK if you prefer
+import { env } from "process";
 // use server-side key from env!
 const groq = new Groq({
-  apiKey: "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",
+  apiKey: env.GROQ_API_KEY,
 });
 
 /*

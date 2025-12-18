@@ -1,9 +1,9 @@
 // api/controllers/matchController.js
 import Groq from "groq-sdk";
 import PDFDocument from "pdfkit";
-
+import { env } from "process";
 const groq = new Groq({
-  apiKey: "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",
+  apiKey: env.GROQ_API_KEY,
 });
 
 // -----------------------------------------
